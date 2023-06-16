@@ -36,7 +36,7 @@ export default function ToDoItem(Props: ToDoItemProps) {
 
 
     return (
-        <div className='flex flex-row items-center justify-between p-6 rounded-2xl shadow'>
+        <div className='flex flex-row items-center justify-between px-6 py-4 rounded-2xl shadow-md bg-white bg-opacity-75 backdrop-blur-sm'>
             <div className='flex flex-row gap-4 items-center'>
                 {/* check box*/}
                 <div className='flex'>
