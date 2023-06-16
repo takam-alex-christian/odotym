@@ -1,9 +1,14 @@
-import Image from 'next/image'
+
+
+//custom imports
+import CheckBox from "@/components/CheckBox"
+
+import ToDoItem from "@/features/ToDoItem"
 
 export default function Home() {
   return (
-    <main>
-      
+    <main className="">
+        <ToDoItem />
     </main>
   )
 }
