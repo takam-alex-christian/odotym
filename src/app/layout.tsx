@@ -6,7 +6,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ weight: ["600", "400"] ,subsets: ['latin'] })
 
 export const metadata = {
   title: 'Create Next App',
