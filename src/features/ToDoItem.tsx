@@ -16,10 +16,7 @@ interface ToDoItemProps{
 export default function ToDoItem(Props: ToDoItemProps) {
 
     const [toDoState, setToDoState] = useState({
-        value: "Default",
-        completed: false,
-        important: false,
-        parentFolder: "Default"
+        ...Props.toDoItem
     });
 
     function toggleCheck(e: React.MouseEvent<HTMLButtonElement>) {

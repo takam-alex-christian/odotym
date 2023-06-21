@@ -1,13 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-    async rewrites(){
-        return[
-            {
-                source: '/odotym/:path*',
-                destination: 'http://localhost:3001/odotym/:path*'
-            }
-        ]
-    }
-}
+const nextConfig = {}
 
 module.exports = nextConfig

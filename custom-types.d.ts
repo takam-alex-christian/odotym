@@ -10,3 +10,9 @@ type ToDoItemType = {
     important: boolean,
     parentFolder: string
 }
+
+//lib props
+interface GetToDosProps{
+    start: number,
+    number: number
+}
