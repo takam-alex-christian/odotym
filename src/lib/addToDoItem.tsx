@@ -1,24 +1,19 @@
 
 
-export default function addToDoItem(params: { value: string }) {
+export default async function addToDoItem(AddToDoProps: Partial<ToDoItemType>) {
 
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-    myHeaders.append("mode", "no-cors");
+    myHeaders.append("Content-Type", "application/json");
 
-    var urlencoded = new URLSearchParams();
-    urlencoded.append("value", params.value);
+    
 
-
-    fetch("/odotym/todo", {
+    const res = await fetch("/api", {
         method: 'POST',
         headers: myHeaders,
-        body: urlencoded,
-        redirect: 'follow'
+        body: JSON.stringify(AddToDoProps)
     })
-        .then(response => response.json())
-        .then(result => { return result })
-        .catch(error => console.log('error', error));
 
+    
+    if(res.ok) return res.json()
 }
 

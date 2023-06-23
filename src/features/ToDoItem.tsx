@@ -6,7 +6,8 @@ import React, { useState } from 'react'
 import CheckBox from '@/components/CheckBox'
 import ImportantStar from '@/components/ImportantStar';
 
-
+//lib
+import { updateToDo } from '@/lib/updateToDo';
 
 
 interface ToDoItemProps{
@@ -23,6 +24,10 @@ export default function ToDoItem(Props: ToDoItemProps) {
         setToDoState((prev) => {
             return { ...prev, completed: prev.completed ? false : true };
         })
+
+        updateToDo({_id: Props.toDoItem._id});
+
+
     }
 
     function toggleImportance(e: React.MouseEvent<HTMLButtonElement>) {

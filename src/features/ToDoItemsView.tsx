@@ -14,14 +14,14 @@ export default function ToDoItemsView() {
 
     //we fetch todos on start once
     useEffect(() => {
-        getToDos({ start: 0, number: 5 }).then((fetchedToDos: Array<ToDoItemType>) => {
+        getToDos({ start: 0, number: 6 }).then((fetchedToDos: Array<ToDoItemType>) => {
             setToDos([...fetchedToDos])
         })
     }, [])
-
+    
 
     return (
-        <div>
+        <div className=''>
             <ToDoItemList>
                 {toDos.map((eachToDo: ToDoItemType, index: number) => {
                     return <ToDoItem key={index} toDoItem={eachToDo} />

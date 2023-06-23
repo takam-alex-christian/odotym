@@ -10,7 +10,7 @@ import addToDoItem from '@/lib/addToDoItem';
 export default function ToDoInputForm() {
 
     const [newToDoState, setNewToDoState] = useState({
-        value: "",
+        value: ""
     });
 
     const [formState, setFormState] = useState({
@@ -20,6 +20,8 @@ export default function ToDoInputForm() {
 
     async function onToDoSubmit(e:FormEvent) {
         e.preventDefault();
+
+        
 
         console.log(await addToDoItem({value: newToDoState.value}));
 
