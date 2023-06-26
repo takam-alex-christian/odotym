@@ -8,8 +8,32 @@ import ToDoItemsView from "@/features/ToDoItemsView"
 
 export default async function Home() {
 
+  const userDate = new Date();
 
+  const daysOfTheWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ]
 
+  const monthsOfTheYear = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ]
 
   return (
     <main className="flex justify-center h-screen bg-gradient-to-br from-[#00000099] to-transparent ">
@@ -22,7 +46,7 @@ export default async function Home() {
               My Day
             </div>
             <div className="text-[#FFFFFFD0] drop-shadow-lg  text-base font-light">
-              Thursday, June 15
+              {`${daysOfTheWeek[userDate.getDay()]}, ${monthsOfTheYear[userDate.getMonth()]} ${userDate.getDate()}`}
             </div>
           </div>
 
