@@ -25,14 +25,20 @@ export default function ToDoItem(Props: ToDoItemProps) {
             return { ...prev, completed: prev.completed ? false : true };
         })
 
-        updateToDo({_id: Props.toDoItem._id});
-
+        updateToDo({_id: Props.toDoItem._id, completed: !toDoState.completed}).then((backendResponse : {message: string, doc: ToDoItemType})=>{
+            console.log(backendResponse.message)
+        })
+        
 
     }
 
     function toggleImportance(e: React.MouseEvent<HTMLButtonElement>) {
         setToDoState((prev) => {
             return { ...prev, important: prev.important ? false : true };
+        })
+
+        updateToDo({_id: Props.toDoItem._id, important: !toDoState.completed}).then((backendResponse : {message: string, doc: ToDoItemType})=>{
+            console.log(backendResponse.message)
         })
     }
 

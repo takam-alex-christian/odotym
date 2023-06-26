@@ -15,7 +15,10 @@ export default function ToDoItemsView() {
     //we fetch todos on start once
     useEffect(() => {
         getToDos({ start: 0, number: 6 }).then((fetchedToDos: Array<ToDoItemType>) => {
+            
+            console.log(fetchedToDos)
             setToDos([...fetchedToDos])
+            
         })
     }, [])
     

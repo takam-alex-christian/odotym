@@ -16,23 +16,35 @@ export async function GET(request: NextRequest){
 
 export async function POST(request: NextRequest) {
     const reqBody = await request.json();
-    
-    const backendPostBody = new URLSearchParams();
 
     const headers = new Headers();
-    headers.append("Content-Type", "application/x-www-form-urlencoded");
+    headers.append("Content-Type", "application/json");
 
-    
-    Object.keys(reqBody).forEach((key)=>{
-        backendPostBody.append(key, reqBody[key])
-    })
-    
     const backendResponse = await fetch("http://localhost:3001/odotym/todo",{
         headers: headers,
         method: "POST",
-        body: backendPostBody
+        body: JSON.stringify(reqBody)
     } )
     
     return NextResponse.json(await backendResponse.json())
 }
 
+export async function PATCH(request: NextRequest){
+    
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    const patchData = await request.json()
+
+    // console.log("life is : ", patchData)
+
+    const backendReq = await fetch("http://localhost:3001/odotym/todo",
+    {
+        method: "PATCH",
+        headers: headers,
+        body: JSON.stringify(patchData)
+    })
+
+
+    return NextResponse.json(await backendReq.json())
+}
