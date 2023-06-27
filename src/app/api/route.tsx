@@ -36,7 +36,6 @@ export async function PATCH(request: NextRequest){
 
     const patchData = await request.json()
 
-    // console.log("life is : ", patchData)
 
     const backendReq = await fetch("http://localhost:3001/odotym/todo",
     {

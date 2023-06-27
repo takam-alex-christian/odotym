@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef} from 'react'
+import React, { useState, useRef, MouseEventHandler } from 'react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +14,7 @@ import { updateToDo } from '@/lib/updateToDo';
 
 interface ToDoItemProps {
     toDoItem: ToDoItemType,
+    onContextMenu: (callerData: ContextMenuCallerDataType) => void 
 
 }
 export default function ToDoItem(Props: ToDoItemProps) {
@@ -21,12 +22,6 @@ export default function ToDoItem(Props: ToDoItemProps) {
     const [toDoState, setToDoState] = useState({
         ...Props.toDoItem
     });
-
-    const contextMenuRef = useRef(null);
-
-    const [toDoItemMenuStates, setToDoItemMenuStates] = useState({
-        show: false
-    })
 
     //self explanatory
     function toggleCheck(e: React.MouseEvent<HTMLButtonElement>) {
@@ -37,7 +32,6 @@ export default function ToDoItem(Props: ToDoItemProps) {
         updateToDo({ _id: Props.toDoItem._id, completed: !toDoState.completed }).then((backendResponse: { message: string, doc: ToDoItemType }) => {
             console.log(backendResponse.message)
         })
-
 
     }
 
@@ -53,27 +47,16 @@ export default function ToDoItem(Props: ToDoItemProps) {
     }
 
     function onContextMenu(e: React.MouseEvent<HTMLDivElement>) {
-        // setToDoMenu((prev)=>{
-        //     return {...prev, posX:e.clientX}
-        // })
         e.preventDefault();
-        
-        let contextMenuContainer = contextMenuRef.current as unknown as HTMLDivElement
-        contextMenuContainer.style.left = `${e.clientX - e.currentTarget.getBoundingClientRect().left}px`
 
-        setToDoItemMenuStates((prev)=>{
-            return {...prev, show: true}
-        })
-        // console.log(e.currentTarget.getBoundingClientRect().left)
-        
+        //we calculate and store to contextCallerstate the distance between the cursor and the x and y coordinates of the caller toDoitem
+        Props.onContextMenu({_id: toDoState._id, posX: e.clientX, posY: e.clientY});
+
+        console.log(e.screenX)
     }
 
     return (
         <div onContextMenu={onContextMenu} className='flex flex-row relative items-center justify-between px-6 py-4 rounded-2xl shadow-md bg-white bg-opacity-75 backdrop-blur-sm'>
-            <div ref={contextMenuRef} className={`${toDoItemMenuStates.show? "flex" : "hidden"} flex-col gap-1 absolute z-10 bg-white rounded-lg `}>
-                <button className='h-12 px-3'><div className={`flex flex-row gap-2 `}><div className='text-red-600'><FontAwesomeIcon icon={faTrash} /></div> <div>Delete</div></div></button>
-            </div>
-
             <div className='flex flex-row gap-4 items-center'>
                 {/* check box*/}
                 <div className='flex'>
@@ -92,7 +75,7 @@ export default function ToDoItem(Props: ToDoItemProps) {
             <div className='flex'>
                 <ImportantStar isImportant={toDoState.important} onImportanceChange={toggleImportance} />
             </div>
-            
+
         </div>
     )
 }

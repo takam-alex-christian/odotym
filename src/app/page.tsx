@@ -1,10 +1,10 @@
-
-
-
 //custom imports
 import ToDoInputForm from "@/features/ToDoInputForm"
 
 import ToDoItemsView from "@/features/ToDoItemsView"
+
+import { ToDoItemContextMenu } from "@/features/contextMenu";
+import { useEffect, useRef, useState } from "react";
 
 export default async function Home() {
 
@@ -34,10 +34,14 @@ export default async function Home() {
     "November",
     "December"
   ]
+  
+  //context menu
+  //react docs says it's not unusual to pass a state 12 times down
 
   return (
-    <main className="flex justify-center h-screen bg-gradient-to-br from-[#00000099] to-transparent ">
-
+    <main className=" flex relative justify-center h-screen bg-gradient-to-br from-[#00000099] to-transparent ">
+      
+      
       <div className="flex flex-col justify-between w-3/4 h-full overflow-hidden py-6 gap-2">
         <div className="flex flex-col gap-2">
 
@@ -53,8 +57,6 @@ export default async function Home() {
           <ToDoItemsView />
           
         </div>
-
-
 
         <ToDoInputForm />
       </div>

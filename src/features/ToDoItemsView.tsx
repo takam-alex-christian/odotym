@@ -1,12 +1,14 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 
 
 
 import ToDoItemList from '@/layouts/ToDoItemList'
 import ToDoItem from './ToDoItem';
+
+import { ToDoItemContextMenu } from './contextMenu';
 
 import getToDos from '@/lib/getToDos';
 
@@ -27,12 +29,32 @@ export default function ToDoItemsView() {
     }, [])
 
 
-    return (
-        <div className=''>
+    //context menu related
+    const [contextMenuState, setContextMenuState] = useState<ContextMenuCallerDataType>({
+        _id: "",
+        posX: 0,
+        posY: 0
+    })
 
+    const [isContextMenuVisible, setContextMenuVisibility] = useState(false)
+
+    const contextMenuContainerRef = useRef(null)
+
+    function onContextMenu(callerData: ContextMenuCallerDataType) {
+        // alert(`${callerData} is the number passed`);
+        console.log(callerData)
+        setContextMenuState({...callerData});
+        setContextMenuVisibility(true);
+    }
+
+
+    return (
+        <div className='relative'>
+            {isContextMenuVisible && <ToDoItemContextMenu contextMenuState={contextMenuState} contextMenuRef={contextMenuContainerRef} />}
+      
             <ToDoItemList>
                 {toDos.map((eachToDo: ToDoItemType, index: number) => {
-                    return <ToDoItem key={index} toDoItem={eachToDo} />
+                    return <ToDoItem onContextMenu={onContextMenu} key={index} toDoItem={eachToDo} />
                 })}
             </ToDoItemList>
         </div>
