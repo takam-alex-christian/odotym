@@ -2,7 +2,7 @@
 // import { CheckIcon } from "@heroicons/react/20/solid"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheck } from "@fortawesome/free-solid-svg-icons"
+import { faSquareCheck, faSquare } from "@fortawesome/free-regular-svg-icons"
 
 import { MouseEventHandler } from "react"
 
@@ -20,10 +20,11 @@ export default function CheckBox(Props: CheckBoxProps) {
 
 
   return (
-    <button onClick={Props.onCheckChange} className="w-5 h-5 rounded-full border-2 border-zinc-800 overflow-hidden p-0">
-      <div className={"flex items-center justify-center text-zinc-800 text-sm "}>
-        {Props.checkState && <FontAwesomeIcon icon={faCheck}  />}
+    <button onClick={Props.onCheckChange} className="  overflow-hidden p-0">
+      <div className={"flex items-center justify-center text-zinc-800 text-xl "}>
+        {Props.checkState? <FontAwesomeIcon icon={faSquareCheck}/>: <FontAwesomeIcon icon={faSquare}/>}
       </div>
+
     </button>
   )
 }

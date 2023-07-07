@@ -15,7 +15,7 @@ type ToDoItemType = {
 type ContextMenuCallerDataType = {
     _id: string,
     posX: number,
-    posY: number
+    posY: number,
 }
 
 //lib props

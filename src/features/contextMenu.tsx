@@ -3,6 +3,7 @@ import React, {Ref, RefObject, useEffect, useRef} from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import deleteToDoItem from '@/lib/deleteToDoItem'
 
 
 interface ToDoItemContextMenuProps{
@@ -15,7 +16,7 @@ interface ToDoItemContextMenuProps{
 */
 export function ToDoItemContextMenu(Props: ToDoItemContextMenuProps) {
 
-    useEffect(()=>{
+    useEffect(()=>{   
         (Props.contextMenuRef.current as HTMLDivElement).style.left = `${Props.contextMenuState.posX}px`;
         (Props.contextMenuRef.current as HTMLDivElement).style.top = `${Props.contextMenuState.posY}px`
     }, [Props.contextMenuState])
@@ -23,6 +24,10 @@ export function ToDoItemContextMenu(Props: ToDoItemContextMenuProps) {
 
     function onDeletehandler(e: React.MouseEvent<HTMLButtonElement>){
         // to be implemented
+        deleteToDoItem({_id: Props.contextMenuState._id}).then((result)=>{
+            console.log("item deleted real quick")
+        })
+
     }
 
     return (
