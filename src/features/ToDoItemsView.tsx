@@ -8,7 +8,7 @@ import ToDoItem from '@/features/ToDoItem';
 
 import { ToDoItemContextMenu } from '@/features/contextMenu';
 
-import getToDos from '@/lib/getToDos';
+import getToDos, {newGetToDos} from '@/lib/getToDos';
 
 import { mainUiStateContext, mainUiDispatchContext } from '@/lib/contexts'; //main ui context and dispatch
 
@@ -17,28 +17,31 @@ import { mainUiReducer } from '@/lib/reducers';
 import { MainUiActionTypes, MainUiStateType } from '@/lib/customTypes';
 
 
+const fetchToDos = newGetToDos({start: 0, limit: 2});
+
 export default function ToDoItemsView() {
-    const [toDos, setToDos] = useState<Array<ToDoItemType>>([]);
+
+    const fetchedToDos = fetchToDos()
+
+    const [toDos, setToDos] = useState<Array<ToDoItemType>>([...fetchedToDos]);
 
     const mainUiState = useContext(mainUiStateContext);
     const mainUiDispatch = useContext(mainUiDispatchContext);
 
-    console.log("rerendering")
+    // //we fetch todos on start once
+    // useEffect(() => {
+    //     if(toDos.length == 0){
+    //         getToDos({ start: 0, number: 6 }).then((fetchedToDos: Array<ToDoItemType>) => {
 
-    //we fetch todos on start once
-    useEffect(() => {
-        if(toDos.length == 0){
-            getToDos({ start: 0, number: 6 }).then((fetchedToDos: Array<ToDoItemType>) => {
+    //         console.log(fetchedToDos)
+    //         setToDos([...fetchedToDos])
 
-            console.log(fetchedToDos)
-            setToDos([...fetchedToDos])
+    //     })
+    //     }
 
-        })
-        }
+    //     //if the user clicks when context menu is visible, toggle it's visibility
 
-        //if the user clicks when context menu is visible, toggle it's visibility
-
-    }, [])
+    // }, [])
 
 
     function upDateToDoHandler(toDoItem: Partial<ToDoItemType>){ //makesure id is _id is passed

@@ -9,7 +9,7 @@ import ToDoItemsView from "@/features/ToDoItemsView"
 import { mainUiStateContext, mainUiDispatchContext } from "@/lib/contexts";
 import { MainUiStateType } from "@/lib/customTypes";
 import { mainUiReducer } from "@/lib/reducers";
-import { useReducer } from "react";
+import { Suspense, useReducer } from "react";
 
 export default function Home() {
 
@@ -64,8 +64,10 @@ export default function Home() {
                   {`${daysOfTheWeek[userDate.getDay()]}, ${monthsOfTheYear[userDate.getMonth()]} ${userDate.getDate()}`}
                 </div>
               </div>
+              <Suspense fallback={ <div className="bg-black w-8 h-8 rounded-lg"></div>}>
+                <ToDoItemsView />
 
-              <ToDoItemsView />
+              </Suspense>
 
             </div>
 
