@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useReducer, useContext } from 'react'
 
 import ToDoItemList from '@/layouts/ToDoItemList'
 
@@ -8,27 +8,41 @@ import ToDoItem from '@/features/ToDoItem';
 
 import { ToDoItemContextMenu } from '@/features/contextMenu';
 
-import getToDos from '@/lib/getToDos';
+import getToDos, {newGetToDos} from '@/lib/getToDos';
 
+import { mainUiStateContext, mainUiDispatchContext } from '@/lib/contexts'; //main ui context and dispatch
+
+import { mainUiReducer } from '@/lib/reducers';
+
+import { MainUiActionTypes, MainUiStateType } from '@/lib/customTypes';
+
+
+const fetchToDos = newGetToDos({start: 0, limit: 2});
 
 export default function ToDoItemsView() {
-    const [toDos, setToDos] = useState<Array<ToDoItemType>>([]);
 
+    const fetchedToDos = fetchToDos()
 
-    //we fetch todos on start once
-    useEffect(() => {
-        if(toDos.length == 0){
-            getToDos({ start: 0, number: 6 }).then((fetchedToDos: Array<ToDoItemType>) => {
+    const [toDos, setToDos] = useState<Array<ToDoItemType>>([...fetchedToDos]);
 
-            console.log(fetchedToDos)
-            setToDos([...fetchedToDos])
+    const mainUiState = useContext(mainUiStateContext);
+    const mainUiDispatch = useContext(mainUiDispatchContext);
 
-        })
-        }
+    // //we fetch todos on start once
+    // useEffect(() => {
+    //     if(toDos.length == 0){
+    //         getToDos({ start: 0, number: 6 }).then((fetchedToDos: Array<ToDoItemType>) => {
 
-        //if the user clicks when context menu is visible, toggle it's visibility
+    //         console.log(fetchedToDos)
+    //         setToDos([...fetchedToDos])
 
-    }, [])
+    //     })
+    //     }
+
+    //     //if the user clicks when context menu is visible, toggle it's visibility
+
+    // }, [])
+
 
     function upDateToDoHandler(toDoItem: Partial<ToDoItemType>){ //makesure id is _id is passed
 
@@ -52,21 +66,35 @@ export default function ToDoItemsView() {
         posX: 0,
         posY: 0
     })
+    
+    const [mainUiStatex, dispatchMainUiStatex] = useReducer(mainUiReducer, {
+        isContextMenuVisible: false,
 
-    const [isContextMenuVisible, setContextMenuVisibility] = useState(false)
+    } as MainUiStateType);
 
     const contextMenuContainerRef = useRef(null)
 
     function onContextMenu(callerData: ContextMenuCallerDataType) {
         // alert(`${callerData} is the number passed`);
-        console.log(callerData)
+        // console.log(callerData)
+
         setContextMenuState({...callerData});
-        setContextMenuVisibility(true);
+
+        mainUiDispatch({
+            type: MainUiActionTypes.contextMenuShown,
+            payload: {}
+        })
     }
+
+    //testing
+    useEffect(()=>{
+        console.log("action passed");
+        console.log(mainUiState)
+    }, [mainUiState])
 
     return (
         <div className='relative'>
-            {isContextMenuVisible && <ToDoItemContextMenu contextMenuState={contextMenuState} contextMenuRef={contextMenuContainerRef} />}
+            {mainUiState.isContextMenuVisible && <ToDoItemContextMenu contextMenuState={contextMenuState} contextMenuRef={contextMenuContainerRef} />}
       
             <ToDoItemList>
                 {toDos.map((eachToDo: ToDoItemType, index: number) => {
