@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
 }
 
 
+//i faced a lot of issues trying to implement a DELETE request handler so i went for a conditional POST request
 export async function POST(request: NextRequest) {
     const reqBody = await request.json();
 

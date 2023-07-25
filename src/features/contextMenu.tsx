@@ -1,3 +1,4 @@
+"use client"
 
 import React, {Ref, RefObject, useEffect, useRef} from 'react'
 

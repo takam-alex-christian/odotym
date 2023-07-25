@@ -19,7 +19,7 @@ type ContextMenuCallerDataType = {
 }
 
 //lib props
-interface GetToDosProps{
+interface GetToDosProps {
     start: number,
     number: number
 }

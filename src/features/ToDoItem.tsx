@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, MouseEventHandler } from 'react'
+import React from 'react'
 
 import CheckBox from '@/components/CheckBox'
 import ImportantStar from '@/components/ImportantStar';
@@ -18,27 +18,22 @@ export default function ToDoItem(Props: {
 
     //self explanatory
     function toggleCheck(e: React.MouseEvent<HTMLButtonElement>) {
-        // setProps.toDoItem((prev) => {
-        //     return { ...prev, completed: prev.completed ? false : true };
-        // })
 
-        updateToDo({ _id: Props.toDoItem._id, completed: !Props.toDoItem.completed }).then((backendResponse: { message: string, doc: ToDoItemType }) => {
-            console.log(backendResponse.doc)
-            Props.onUpdateToDo(backendResponse.doc)
-        })
+        Props.onUpdateToDo({ _id: Props.toDoItem._id, completed: !Props.toDoItem.completed }) //update the state first, then initiate the request to the backend server
+        updateToDo({ _id: Props.toDoItem._id, completed: !Props.toDoItem.completed })
+        .then((backendResponse: { message: string, doc: ToDoItemType }) => {
+            console.log(backendResponse)
+        }) // we do nothing with the response yet
 
     }
 
     //self explanatory
     function toggleImportance(e: React.MouseEvent<HTMLButtonElement>) {
-        // setProps.toDoItem((prev) => {
-        //     return { ...prev, important: prev.important ? false : true };
-        // })
+        Props.onUpdateToDo({ _id: Props.toDoItem._id, important: !Props.toDoItem.important}) //update the state first, then initiate the request to the backend server
 
-        updateToDo({ _id: Props.toDoItem._id, important: !Props.toDoItem.important }).then((backendResponse: { message: string, doc: ToDoItemType }) => {
-            console.log(backendResponse.doc)
-            Props.onUpdateToDo(backendResponse.doc)
-
+        updateToDo({ _id: Props.toDoItem._id, important: !Props.toDoItem.important })
+        .then((backendResponse: { message: string, doc: ToDoItemType }) => {
+            console.log(backendResponse)
         })
     }
 

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef, useReducer, useContext } from 'react'
+import React, { useState, useRef, useReducer, useContext, useEffect } from 'react'
 
 import ToDoItemList from '@/layouts/ToDoItemList'
 
@@ -8,7 +8,7 @@ import ToDoItem from '@/features/ToDoItem';
 
 import { ToDoItemContextMenu } from '@/features/contextMenu';
 
-import getToDos, {newGetToDos} from '@/lib/getToDos';
+import {newGetToDos} from '@/lib/getToDos';
 
 import { mainUiStateContext, mainUiDispatchContext } from '@/lib/contexts'; //main ui context and dispatch
 
@@ -17,50 +17,33 @@ import { mainUiReducer } from '@/lib/reducers';
 import { MainUiActionTypes, MainUiStateType } from '@/lib/customTypes';
 
 
-const fetchToDos = newGetToDos({start: 0, limit: 2});
 
 export default function ToDoItemsView() {
+    
+    const fetchToDos = newGetToDos({start: 0, limit: 6});
 
     const fetchedToDos = fetchToDos()
-
-    const [toDos, setToDos] = useState<Array<ToDoItemType>>([...fetchedToDos]);
+    
+    const [toDos, setToDos] = useState<Array<ToDoItemType>>(fetchedToDos); 
 
     const mainUiState = useContext(mainUiStateContext);
     const mainUiDispatch = useContext(mainUiDispatchContext);
-
-    // //we fetch todos on start once
-    // useEffect(() => {
-    //     if(toDos.length == 0){
-    //         getToDos({ start: 0, number: 6 }).then((fetchedToDos: Array<ToDoItemType>) => {
-
-    //         console.log(fetchedToDos)
-    //         setToDos([...fetchedToDos])
-
-    //     })
-    //     }
-
-    //     //if the user clicks when context menu is visible, toggle it's visibility
-
-    // }, [])
-
 
     function upDateToDoHandler(toDoItem: Partial<ToDoItemType>){ //makesure id is _id is passed
 
         // @ts-ignore
         setToDos((prev)=>{
             if(Object.keys(toDoItem).includes('_id')){
-                console.log(prev.map(eachItem => {if(eachItem._id == toDoItem._id) return toDoItem; else return eachItem} ))
-                return prev.map(eachItem => eachItem._id == toDoItem._id? toDoItem: eachItem)
+                // console.log(prev.map(eachItem => {if(eachItem._id == toDoItem._id) return toDoItem; else return eachItem} ))
+                return prev.map(eachItem => eachItem._id == toDoItem._id? {...eachItem, ...toDoItem}: eachItem)
             }
         })
     }
-    
-    // //context menu related
-    // window.addEventListener("click", (e)=>{
-    //     if(isContextMenuVisible) setContextMenuVisibility(false);
-    // })
-    
 
+    // useEffect(()=>{
+    //     console.log(toDos)
+    // }, [toDos])
+    
     const [contextMenuState, setContextMenuState] = useState<ContextMenuCallerDataType>({
         _id: "",
         posX: 0,
@@ -86,19 +69,13 @@ export default function ToDoItemsView() {
         })
     }
 
-    //testing
-    useEffect(()=>{
-        console.log("action passed");
-        console.log(mainUiState)
-    }, [mainUiState])
-
     return (
         <div className='relative'>
             {mainUiState.isContextMenuVisible && <ToDoItemContextMenu contextMenuState={contextMenuState} contextMenuRef={contextMenuContainerRef} />}
       
             <ToDoItemList>
-                {toDos.map((eachToDo: ToDoItemType, index: number) => {
-                    return <ToDoItem onUpdateToDo={upDateToDoHandler} onContextMenu={onContextMenu} key={index} toDoItem={eachToDo} />
+                {toDos.map((eachToDo: ToDoItemType) => {
+                    return <ToDoItem onUpdateToDo={upDateToDoHandler} onContextMenu={onContextMenu} key={eachToDo._id} toDoItem={eachToDo} />
                 })}
             </ToDoItemList>
         </div>
