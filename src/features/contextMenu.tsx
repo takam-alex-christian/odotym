@@ -17,12 +17,6 @@ interface ToDoItemContextMenuProps{
 */
 export function ToDoItemContextMenu(Props: ToDoItemContextMenuProps) {
 
-    useEffect(()=>{   
-        (Props.contextMenuRef.current as HTMLDivElement).style.left = `${Props.contextMenuState.posX}px`;
-        (Props.contextMenuRef.current as HTMLDivElement).style.top = `${Props.contextMenuState.posY}px`
-    }, [Props.contextMenuState])
-    
-
     function onDeletehandler(e: React.MouseEvent<HTMLButtonElement>){
         // to be implemented
         deleteToDoItem({_id: Props.contextMenuState._id}).then((result)=>{

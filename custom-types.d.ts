@@ -5,7 +5,11 @@ type ToDoItemType = {
     _id: string,
     value: string,
     completed: boolean,
-    creationDate: Date,
+    creationDate: {
+        year: number,
+        month: number,
+        day: number
+    },
     lastModified: Date,
     important: boolean,
     parentFolder: string

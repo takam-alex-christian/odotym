@@ -1,17 +1,20 @@
 "use client"
 
-//custom imports
-import ToDoInputForm from "@/features/ToDoInputForm"
-
 import ToDoItemsView from "@/features/ToDoItemsView"
 
 
 import { mainUiStateContext, mainUiDispatchContext } from "@/lib/contexts";
-import { MainUiStateType } from "@/lib/customTypes";
-import { mainUiReducer } from "@/lib/reducers";
+import { MainUiStateType, ToDosStateType } from "@/lib/customTypes";
+import { mainUiReducer, toDosReducer } from "@/lib/reducers";
 import { Suspense, useReducer } from "react";
 
+
+
+
 export default function Home() {
+
+
+    // const [toDosState, toDosDispatch] = useReducer(toDosReducer, initialState);
 
   const [mainUiState, mainUiDispatch] = useReducer(mainUiReducer, {
     isContextMenuVisible: false,
@@ -44,6 +47,13 @@ export default function Home() {
     "December"
   ]
 
+
+  //notes will be fetched here
+  //they will simply be passed to the todoitemsview
+
+
+
+
   return (
     <mainUiStateContext.Provider value={mainUiState} >
       <mainUiDispatchContext.Provider value={mainUiDispatch}>
@@ -60,15 +70,14 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="h-full flex-grow overflow-y-auto">
-              <Suspense fallback={<div className="p-2 rounded-lg bg-slate-400">Loadinging...</div>}>
-                <ToDoItemsView />
-              </Suspense>
-            </div>
+              {/* this area is appropriate for a new context to pass fetched toDos */}
+              <div className="h-full flex-grow overflow-y-auto">
+                <Suspense fallback={<div className="p-2 rounded-lg bg-slate-400">Loadinging...</div>}>
+                  <ToDoItemsView />
+                </Suspense>
+              </div>
 
-            <div className="h-fit flex-grow-0">
-              <ToDoInputForm />
-            </div>
+              
           </div>
         </main>
       </mainUiDispatchContext.Provider>

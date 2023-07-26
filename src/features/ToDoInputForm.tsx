@@ -1,6 +1,6 @@
 "use client"
 
-import React, { ChangeEvent, FormEvent, SyntheticEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useState, Dispatch } from 'react'
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,7 +8,12 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { faCircle } from '@fortawesome/free-regular-svg-icons'
 import addToDoItem from '@/lib/addToDoItem';
 
-export default function ToDoInputForm() {
+
+import { ToDosReducerAction, AllowedToDoActionTypes } from '@/lib/reducers'
+
+interface ToDoInputFormProps{ toDosDispatch: Dispatch<ToDosReducerAction> }
+
+export default function ToDoInputForm(Props: ToDoInputFormProps) {
 
     const [formState, setFormState] = useState<{inputValue: string}>({
         inputValue: ""
@@ -19,8 +24,10 @@ export default function ToDoInputForm() {
     async function onToDoSubmit(e:FormEvent) {
         e.preventDefault();
 
+        Props.toDosDispatch({type: AllowedToDoActionTypes.added, payload: {toDoItem: {value: formState.inputValue}}})
+
         await addToDoItem({value: formState.inputValue}).then(result=>{
-            console.log(result)
+            Props.toDosDispatch({type: AllowedToDoActionTypes.revalidated, payload: {toDoItem: result }})
         })
 
     }
