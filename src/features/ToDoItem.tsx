@@ -1,45 +1,58 @@
 "use client"
 
-import React, { useState, useRef, MouseEventHandler } from 'react'
+import React, {Dispatch} from 'react'
 
 import CheckBox from '@/components/CheckBox'
 import ImportantStar from '@/components/ImportantStar';
+
+
 
 //lib
 import { updateToDo } from '@/lib/updateToDo';
 
 
+//types
+import { ToDosReducerAction ,AllowedToDoActionTypes} from '@/lib/reducers';
+
 export default function ToDoItem(Props: {
     toDoItem: ToDoItemType,
-    onUpdateToDo: Function,
+    toDosDispatch: Dispatch<ToDosReducerAction>,
     onContextMenu: (callerData: ContextMenuCallerDataType) => void
 
 }) {
 
-    //self explanatory
-    function toggleCheck(e: React.MouseEvent<HTMLButtonElement>) {
-        // setProps.toDoItem((prev) => {
-        //     return { ...prev, completed: prev.completed ? false : true };
-        // })
+    
 
-        updateToDo({ _id: Props.toDoItem._id, completed: !Props.toDoItem.completed }).then((backendResponse: { message: string, doc: ToDoItemType }) => {
-            console.log(backendResponse.doc)
-            Props.onUpdateToDo(backendResponse.doc)
-        })
+    //self explanatory
+    function onToggleCompleted(e: React.MouseEvent<HTMLButtonElement>) {
+
+        Props.toDosDispatch({type: AllowedToDoActionTypes.completed, payload: {_id: Props.toDoItem._id}})
+
+        // Props.onUpdateToDo({ _id: Props.toDoItem._id, completed: !Props.toDoItem.completed }) //update the state first, then initiate the request to the backend server
+        
+        // if(typeof toDosDispatch !== "undefined") toDosDispatch({type: AllowedToDoActionTypes.completed, payload: {_id: Props.toDoItem._id}});
+        
+        updateToDo({ _id: Props.toDoItem._id, completed: !Props.toDoItem.completed })
+        .then((backendResponse: { message: string, doc: ToDoItemType }) => {
+            console.log(backendResponse)
+        }) // we do nothing with the response yet
+
 
     }
 
     //self explanatory
-    function toggleImportance(e: React.MouseEvent<HTMLButtonElement>) {
-        // setProps.toDoItem((prev) => {
-        //     return { ...prev, important: prev.important ? false : true };
-        // })
+    function onToggleStarred(e: React.MouseEvent<HTMLButtonElement>) {
+        // Props.onUpdateToDo({ _id: Props.toDoItem._id, important: !Props.toDoItem.important}) //update the state first, then initiate the request to the backend server
+        Props.toDosDispatch({type: AllowedToDoActionTypes.marked, payload: {_id: Props.toDoItem._id}})
+        
+        // if(typeof toDosDispatch !== "undefined") toDosDispatch({type: AllowedToDoActionTypes.marked, payload: {_id: Props.toDoItem._id}});
 
-        updateToDo({ _id: Props.toDoItem._id, important: !Props.toDoItem.important }).then((backendResponse: { message: string, doc: ToDoItemType }) => {
-            console.log(backendResponse.doc)
-            Props.onUpdateToDo(backendResponse.doc)
-
+        updateToDo({ _id: Props.toDoItem._id, important: !Props.toDoItem.important })
+        .then((backendResponse: { message: string, doc: ToDoItemType }) => {
+            console.log(backendResponse)
         })
+
+
     }
 
     function onContextMenu(e: React.MouseEvent<HTMLDivElement>) {
@@ -56,7 +69,7 @@ export default function ToDoItem(Props: {
             <div className='flex flex-row gap-4 items-center'>
                 {/* check box*/}
                 <div className='flex'>
-                    <CheckBox checkState={Props.toDoItem.completed} onCheckChange={toggleCheck} />
+                    <CheckBox checkState={Props.toDoItem.completed} onCheckChange={onToggleCompleted} />
                 </div>
 
                 {/* the text content of the item */}
@@ -66,10 +79,9 @@ export default function ToDoItem(Props: {
                 </div>
             </div>
 
-
             {/* ToDoItem options */}
             <div className='flex'>
-                <ImportantStar isImportant={Props.toDoItem.important} onImportanceChange={toggleImportance} />
+                <ImportantStar isImportant={Props.toDoItem.important} onImportanceChange={onToggleStarred} />
             </div>
 
         </div>

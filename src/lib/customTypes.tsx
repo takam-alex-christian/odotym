@@ -9,11 +9,18 @@ enum MainUiActionTypes{
     contextMenuHidden = "context_menu_hidden"
 }
 
-
-export type {
-    MainUiStateType
+//types toDoState
+type ToDosStateType = {
+    toDos: Array<ToDoItemType>
 }
 
-export {
+
+
+export type {
+    MainUiStateType,
+    ToDosStateType
+}
+
+export{
     MainUiActionTypes
 }

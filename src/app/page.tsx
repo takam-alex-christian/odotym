@@ -1,17 +1,20 @@
 "use client"
 
-//custom imports
-import ToDoInputForm from "@/features/ToDoInputForm"
-
 import ToDoItemsView from "@/features/ToDoItemsView"
 
 
 import { mainUiStateContext, mainUiDispatchContext } from "@/lib/contexts";
-import { MainUiStateType } from "@/lib/customTypes";
-import { mainUiReducer } from "@/lib/reducers";
+import { MainUiStateType, ToDosStateType } from "@/lib/customTypes";
+import { mainUiReducer, toDosReducer } from "@/lib/reducers";
 import { Suspense, useReducer } from "react";
 
+
+
+
 export default function Home() {
+
+
+    // const [toDosState, toDosDispatch] = useReducer(toDosReducer, initialState);
 
   const [mainUiState, mainUiDispatch] = useReducer(mainUiReducer, {
     isContextMenuVisible: false,
@@ -44,36 +47,38 @@ export default function Home() {
     "December"
   ]
 
-  //context menu
-  //react docs says it's not unusual to pass a state 12 times down
+
+  //notes will be fetched here
+  //they will simply be passed to the todoitemsview
+
+
+
 
   return (
     <mainUiStateContext.Provider value={mainUiState} >
       <mainUiDispatchContext.Provider value={mainUiDispatch}>
         <main className=" flex relative justify-center h-screen bg-gradient-to-br from-[#00000099] to-transparent ">
 
+          <div className="flex flex-col justify-start w-3/4 h-screen py-6 gap-2">
 
-          <div className="flex flex-col justify-between w-3/4 h-full overflow-hidden py-6 gap-2">
-            <div className="flex flex-col gap-2">
-
-              <div className={"flex flex-col gap-1 py-8"}>
-                <div className={`text-[#ffffff] text-2xl font-semibold tracking-wide`}>
-                  My Day
-                </div>
-                <div className="text-[#FFFFFFD0] drop-shadow-lg  text-base font-light">
-                  {`${daysOfTheWeek[userDate.getDay()]}, ${monthsOfTheYear[userDate.getMonth()]} ${userDate.getDate()}`}
-                </div>
+            <div className={"flex flex-col gap-1 py-8 flex-grow-0 "}>
+              <div className={`text-[#ffffff] text-2xl font-semibold tracking-wide`}>
+                My Day
               </div>
-              <Suspense fallback={ <div className="bg-black w-8 h-8 rounded-lg"></div>}>
-                <ToDoItemsView />
-
-              </Suspense>
-
+              <div className="text-[#FFFFFFD0] drop-shadow-lg  text-base font-light">
+                {`${daysOfTheWeek[userDate.getDay()]}, ${monthsOfTheYear[userDate.getMonth()]} ${userDate.getDate()}`}
+              </div>
             </div>
 
-            <ToDoInputForm />
-          </div>
+              {/* this area is appropriate for a new context to pass fetched toDos */}
+              <div className="h-full flex-grow overflow-y-auto">
+                <Suspense fallback={<div className="p-2 rounded-lg bg-slate-400">Loadinging...</div>}>
+                  <ToDoItemsView />
+                </Suspense>
+              </div>
 
+              
+          </div>
         </main>
       </mainUiDispatchContext.Provider>
     </mainUiStateContext.Provider>
